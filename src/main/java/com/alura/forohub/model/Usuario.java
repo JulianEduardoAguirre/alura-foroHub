@@ -1,7 +1,10 @@
 package com.alura.forohub.model;
 
+import jakarta.persistence.Embeddable;
+
 import java.util.List;
 
+@Embeddable //dado que lo usan otras clases??
 public class Usuario {
     private Long id;
     private String nombre;
