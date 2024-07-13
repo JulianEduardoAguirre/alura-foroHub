@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/topicos")
 public class TopicoController {
@@ -18,8 +20,15 @@ public class TopicoController {
 
     @PostMapping
     public void registrarTopico(@RequestBody DatosRegistroTopico datosRegistroTopico) {
-        System.out.println("Exito");
-        System.out.println(datosRegistroTopico);
-        topicoRepository.save(new Topico(datosRegistroTopico));
+
+        var repetido = topicoRepository.existsByTituloAndMensaje(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje());
+
+        if (repetido) {
+            System.out.println("Tópico y mensaje repetidos.");
+        } else {
+            System.out.println("Nuevo tópico salvado en la base de datos");
+            topicoRepository.save(new Topico(datosRegistroTopico));
+        }
+
     }
 }
