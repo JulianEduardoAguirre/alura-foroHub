@@ -22,8 +22,7 @@ public class Topico {
     private Long id;
     private String titulo;
     private String mensaje;
-    @Column(name = "fecha_creacion")
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime creado;
     private Boolean status;
     private String autor;
 //    @Embedded //Dado que Topico y Respuesta usarían a usuario?
@@ -35,7 +34,7 @@ public class Topico {
         this.mensaje = datosRegistroTopico.mensaje();
         this.curso = datosRegistroTopico.curso();
         this.autor = datosRegistroTopico.autor();
-        this.fechaCreacion = LocalDateTime.now();
+        this.creado = LocalDateTime.now();
         this.status = true;
     }
 //    private Curso curso;
