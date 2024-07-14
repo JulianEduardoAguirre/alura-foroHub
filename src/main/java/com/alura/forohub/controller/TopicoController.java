@@ -1,5 +1,6 @@
 package com.alura.forohub.controller;
 
+import com.alura.forohub.model.DatosActualizarTopico;
 import com.alura.forohub.model.DatosListadoTopico;
 import com.alura.forohub.model.DatosRegistroTopico;
 import com.alura.forohub.model.Topico;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -54,9 +56,23 @@ public class TopicoController {
 
     }
 
-    @PutMapping("/actualizar/{id}")
-    public void actualizarTopico(@PathVariable(name = "id") Long id) {
+    @PutMapping("/{id}")
+    @Transactional
+    public void actualizarTopico(@PathVariable(name = "id") Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+        Topico topico = topicoRepository.getReferenceById(id);
 
+        boolean isPresent = topicoRepository.existsById(id);
+
+        if (isPresent) {
+            boolean isRepeating = topicoRepository.existsByTituloAndMensaje(datosActualizarTopico.titulo(), datosActualizarTopico.mensaje());
+            if(isRepeating) {
+                System.out.println("Ya existe ese tópico con ese mensaje.");
+            } else {
+                topico.actualizarDatos(datosActualizarTopico);
+            }
+        } else {
+            System.out.println("No existe un tópico con ese id en la base de datos.");
+        }
     }
 
 //    @GetMapping("/ultimos")
