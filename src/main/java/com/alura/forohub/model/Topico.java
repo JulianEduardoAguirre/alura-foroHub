@@ -39,15 +39,15 @@ public class Topico {
     }
 
     public void actualizarDatos(DatosActualizarTopico datosActualizarTopico) {
-        if (datosActualizarTopico.titulo() != null) {
+        if (datosActualizarTopico.titulo() != null && !datosActualizarTopico.titulo().isBlank()) {
             this.titulo = datosActualizarTopico.titulo();
         }
 
-        if (datosActualizarTopico.mensaje() != null) {
+        if (datosActualizarTopico.mensaje() != null && !datosActualizarTopico.mensaje().isBlank()) {
             this.mensaje = datosActualizarTopico.mensaje();
         }
 
-        if (datosActualizarTopico.curso() != null) {
+        if (datosActualizarTopico.curso() != null && !datosActualizarTopico.curso().isBlank()) {
             this.curso = datosActualizarTopico.curso();
         }
 
