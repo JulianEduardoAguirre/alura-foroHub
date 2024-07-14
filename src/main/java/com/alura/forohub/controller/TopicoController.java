@@ -45,16 +45,16 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    public DatosListadoTopico buscarTopicoPorId(@PathVariable(name = "id", required = true) Long id) {
+    public ResponseEntity<DatosListadoTopico> buscarTopicoPorId(@PathVariable(name = "id", required = true) Long id) {
         Optional<Topico> topicoBuscado = topicoRepository.findById(id);
 
         if(topicoBuscado.isPresent()) {
             System.out.println("Tópico encontrado");
-            return new DatosListadoTopico(topicoBuscado.get());
-        } else {
-            System.out.println("No se encontró el tópico");
-            return null;
+            Topico topicoEncontrado = topicoBuscado.get();
+            return ResponseEntity.ok(new DatosListadoTopico(topicoEncontrado));
         }
+        
+        return ResponseEntity.notFound().build();
 
     }
 
