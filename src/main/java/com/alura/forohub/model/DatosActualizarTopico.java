@@ -10,7 +10,7 @@ public record DatosActualizarTopico(
         @NotBlank(message = "Debe ingresar el mensaje.")
         String mensaje,
 
-        @NotNull(message = "Debe ingresar el curso.")
+        @NotBlank(message = "Debe ingresar el curso.")
         String curso
 ) {
 }
