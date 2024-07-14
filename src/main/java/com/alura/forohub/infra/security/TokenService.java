@@ -4,6 +4,8 @@ import com.alura.forohub.model.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,10 +16,12 @@ import java.time.temporal.TemporalUnit;
 @Service
 public class TokenService {
 
+    @Value("${api.security.secret}")
+    private String apiSecret;
     public String generarToken(Usuario usuario) {
 
         try {
-            Algorithm algorithm = Algorithm.HMAC256("123456");
+            Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             String token = JWT.create()
                     .withIssuer("ForoHub")
                     .withSubject(usuario.getNombre())
