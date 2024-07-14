@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class TopicoController {
 
     @PutMapping("/{id}")
     @Transactional
-    public void actualizarTopico(@PathVariable(name = "id") Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
+    public ResponseEntity actualizarTopico(@PathVariable(name = "id") Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
 
         boolean isPresent = topicoRepository.existsById(id);
 
@@ -67,12 +68,18 @@ public class TopicoController {
             boolean isRepeating = topicoRepository.existsByTituloAndMensaje(datosActualizarTopico.titulo(), datosActualizarTopico.mensaje());
             if(isRepeating) {
                 System.out.println("Ya existe ese tópico con ese mensaje.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe ese tópico con ese título y ese mensaje.");
             } else {
                 Topico topico = topicoRepository.getReferenceById(id);
                 topico.actualizarDatos(datosActualizarTopico);
+                return ResponseEntity.ok(new DatosActualizarTopico(
+                        topico.getTitulo(),
+                        topico.getMensaje(),
+                        topico.getCurso()));
             }
         } else {
             System.out.println("No existe un tópico con ese id en la base de datos.");
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -89,6 +96,10 @@ public class TopicoController {
 
         return ResponseEntity.notFound().build();
     }
+
+
+
+
 //    @DeleteMapping("/{id}")
 //    @Transactional
 //    public void desabilitarTopico(@PathVariable(name = "id") Long id){
