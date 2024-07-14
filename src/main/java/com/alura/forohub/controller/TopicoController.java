@@ -59,7 +59,6 @@ public class TopicoController {
     @PutMapping("/{id}")
     @Transactional
     public void actualizarTopico(@PathVariable(name = "id") Long id, @RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
-        Topico topico = topicoRepository.getReferenceById(id);
 
         boolean isPresent = topicoRepository.existsById(id);
 
@@ -68,12 +67,35 @@ public class TopicoController {
             if(isRepeating) {
                 System.out.println("Ya existe ese tópico con ese mensaje.");
             } else {
+                Topico topico = topicoRepository.getReferenceById(id);
                 topico.actualizarDatos(datosActualizarTopico);
             }
         } else {
             System.out.println("No existe un tópico con ese id en la base de datos.");
         }
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void eliminarTopico(@PathVariable(name = "id") Long id){
+        boolean isPresent = topicoRepository.existsById(id);
+
+        if (isPresent) {
+            topicoRepository.deleteById(id);
+            System.out.println("Tópico eliminado");
+        }
+
+    }
+//    @DeleteMapping("/{id}")
+//    @Transactional
+//    public void desabilitarTopico(@PathVariable(name = "id") Long id){
+//        Optional<Topico> consultaTopico = topicoRepository.findById(id);
+//
+//        if (consultaTopico.isPresent()) {
+//            Topico topico = consultaTopico.get();
+//            topico.desabilitar();
+//        }
+//    }
 
 //    @GetMapping("/ultimos")
 //    public List<DatosListadoTopico> listarUltimos() {

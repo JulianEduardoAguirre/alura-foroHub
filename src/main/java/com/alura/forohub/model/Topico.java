@@ -53,6 +53,10 @@ public class Topico {
 
         this.creado = LocalDateTime.now();
     }
+
+    public void desabilitar() {
+        this.status = false;
+    }
 //    private Curso curso;
 //    private List<String> respuestas;
 //    private List<Respuesta> respuestas;
