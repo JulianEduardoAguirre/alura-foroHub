@@ -15,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -26,17 +28,20 @@ public class TopicoController {
     private TopicoRepository topicoRepository;
 
     @PostMapping
-    public void registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico) {
+    public ResponseEntity registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico, UriComponentsBuilder uriComponentsBuilder) {
 
         var topicoExiste = topicoRepository.existsByTituloAndMensaje(datosRegistroTopico.titulo(), datosRegistroTopico.mensaje());
 
         if (topicoExiste) {
             System.out.println("Tópico y mensaje repetidos.");
-        } else {
-            System.out.println("Nuevo tópico salvado en la base de datos");
-            topicoRepository.save(new Topico(datosRegistroTopico));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ya existe ese tópico con ese título y ese mensaje.");
+
         }
 
+        Topico topico = topicoRepository.save(new Topico(datosRegistroTopico));
+        DatosListadoTopico datosRespuesta = new DatosListadoTopico(topico);
+        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
+        return ResponseEntity.created(url).build();
     }
 
     @GetMapping
@@ -53,7 +58,7 @@ public class TopicoController {
             Topico topicoEncontrado = topicoBuscado.get();
             return ResponseEntity.ok(new DatosListadoTopico(topicoEncontrado));
         }
-        
+
         return ResponseEntity.notFound().build();
 
     }
