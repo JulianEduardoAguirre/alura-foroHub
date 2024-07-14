@@ -52,6 +52,10 @@ public class TopicoController {
             return null;
         }
 
+    }
+
+    @PutMapping("/actualizar/{id}")
+    public void actualizarTopico(@PathVariable(name = "id") Long id) {
 
     }
 

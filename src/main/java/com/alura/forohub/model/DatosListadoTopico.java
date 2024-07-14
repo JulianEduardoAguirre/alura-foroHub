@@ -3,6 +3,7 @@ package com.alura.forohub.model;
 import java.time.LocalDateTime;
 
 public record DatosListadoTopico(
+        Long id,
         String titulo,
         String mensaje,
         LocalDateTime creado,
@@ -11,7 +12,8 @@ public record DatosListadoTopico(
         String curso
 ) {
     public DatosListadoTopico(Topico topico) {
-        this(topico.getTitulo(),
+        this(topico.getId(),
+                topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getCreado(),
                 topico.getStatus(),
